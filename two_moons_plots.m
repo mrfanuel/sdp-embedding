@@ -101,7 +101,7 @@ scatter(V_SDP(id1,1),V_SDP(id1,2),s, y_train(id1),'o','filled');
 hold on;
 scatter(V_SDP(id2,1),V_SDP(id2,2),s, y_train(id2),'s'); 
 colormap jet
-saveas(gcf,'twomoonsSDP','epsc')
+saveas(gcf,'Figures/twomoonsSDP','epsc')
 
 id1 = find(idx_DM==1);
 id2 = find(idx_DM==2);
@@ -110,7 +110,7 @@ scatter(V_DM(id1,1),V_DM(id1,2),s, y_train(id1),'o','filled');
 hold on;
 scatter(V_DM(id2,1),V_DM(id2,2),s, y_train(id2),'s'); 
 colormap jet
-saveas(gcf,'twomoonsDiffusion','epsc')
+saveas(gcf,'Figures/twomoonsDiffusion','epsc')
 
 id1 = find(idx_DM_proj==1);
 id2 = find(idx_DM_proj==2);
@@ -119,7 +119,7 @@ scatter(V_DM_proj(id1,1),V_DM_proj(id1,2),s, y_train(id1),'o','filled');
 hold on;
 scatter(V_DM_proj(id2,1),V_DM_proj(id2,2),s, y_train(id2),'s'); 
 colormap jet
-saveas(gcf,'twomoonsDiffusionProj','epsc')
+saveas(gcf,'Figures/twomoonsDiffusionProj','epsc')
 
 
 

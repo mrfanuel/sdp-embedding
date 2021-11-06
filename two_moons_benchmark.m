@@ -8,6 +8,7 @@ k_clusters = 2;
 n_rep = 10; % number of times k-means is repeated
 
 
+%% data generation
 center_up = [-1.; 0];
 center_down = [1.; 0];
 nb_sample = 500;
@@ -45,13 +46,15 @@ end
 
 X = zscore(X);
 
+%% Plot raw data
 
 figure;
 scatter(X(:,1),X(:,2),[],Y,'.')
 colormap jet
 
-saveas(gcf,'twomoons','epsc')
+saveas(gcf,'Figures/twomoons','epsc')
 
+%% Initialization
 
 range_bw = 0.05:0.1:2.05;
 
@@ -175,7 +178,7 @@ errorbar(range_bw,mean_nmi_DM_proj,std_nmi_DM_proj,'-rd','DisplayName','mean DM 
 ylim([0 1])
 legend
 
-saveas(gcf,'mean_twomoons_gaussians_benchmark','epsc')
+saveas(gcf,'Figures/mean_twomoons_gaussians_benchmark','epsc')
 
 figure;
 errorbar(range_bw,mean_nmi_input*ones(size(range_bw)),std_nmi_input*ones(size(range_bw)),'k','DisplayName','kmeans')
@@ -189,4 +192,4 @@ plot(range_bw,median_nmi_DM_proj,'-rd','DisplayName','median DM + proj')
 ylim([0 1])
 legend
 
-saveas(gcf,'median_twomoons_gaussians_benchmark','epsc')
+saveas(gcf,'Figures/median_twomoons_gaussians_benchmark','epsc')
