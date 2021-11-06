@@ -39,7 +39,7 @@ for i=1:nb_bw
     r = 20;
     id_train = 1:N;
 
-    [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM] = embed(X,id_train,bw,r,n_it,tol)
+    [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM] = embed(X,id_train,bw,r,n_it,tol);
 
     l0 = sqrt_eigenvalues_SDP;
 
