@@ -52,7 +52,7 @@ figure;
 scatter(X(:,1),X(:,2),[],Y,'.')
 colormap jet
 
-saveas(gcf,'Figures/twomoons','epsc')
+saveas(gcf,'/oos.mFigures/twomoons','epsc')
 
 %% Initialization
 
@@ -178,7 +178,7 @@ errorbar(range_bw,mean_nmi_DM_proj,std_nmi_DM_proj,'-rd','DisplayName','mean DM 
 ylim([0 1])
 legend
 
-saveas(gcf,'Figures/mean_twomoons_gaussians_benchmark','epsc')
+saveas(gcf,'/Figures/mean_twomoons_gaussians_benchmark','epsc')
 
 figure;
 errorbar(range_bw,mean_nmi_input*ones(size(range_bw)),std_nmi_input*ones(size(range_bw)),'k','DisplayName','kmeans')
@@ -192,4 +192,4 @@ plot(range_bw,median_nmi_DM_proj,'-rd','DisplayName','median DM + proj')
 ylim([0 1])
 legend
 
-saveas(gcf,'Figures/median_twomoons_gaussians_benchmark','epsc')
+saveas(gcf,'/Figures/median_twomoons_gaussians_benchmark','epsc')
