@@ -16,52 +16,22 @@ x = [x4 x5]';
 truth45 = [labels(id4);labels(id5)];
 N_tot = length(truth45);
 %%%%%%%%%%%%%%%%%%%%%%%%%% Computing Kernel matrices %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+bw = 10;
 
-% squared Euclidean distance matrix
-D2 = squareform(pdist(x)).^2;
- 
+n_it = 50000; % max number of iterations
+tol = 1e-09; % stopping criterion
+r = 100;    
+
 % selecting a subset of the digits to compute the embedding
 n_train = floor(0.3*N_tot);
 id_train =  datasample(1:N_tot,n_train,'Replace',false);
 
-bw = 10;
-k = exp(-D2(id_train,id_train)/bw^2);
-deg = sum(k,2);
-v0 = sqrt(deg/sum(deg));
-
-k_norm = diag(1./sqrt(deg))*k*diag(1./sqrt(deg));
-K = k_norm-v0*v0';
-diagonal = diag(K);
-
-%%%%%%%%%%%%%%%%%%%%%%%%% Projected Power Method %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Computing a solution of the low rank fact. of (SDP) via  Projected Power Method
-
-n_it = 50000; % max number of iterations
-tol = 1e-09; % stopping criterion
-
-%% Initialization
-r0 = 100;    
-id =  datasample(1:n_train,r0,'Replace',false);
-H0 = k(:,id)-v0*(v0(id))';
-H0 = sparse(1:n_train,1:n_train,sqrt(diagonal))*H0./sqrt(sum(H0.^2,2));
-
-%% Projected Power Method
-[H,~,~] = ProjPowerIterations(K,H0,diagonal,n_it,tol);
-[V,L] = svd(H);
-
-disp('Singular values of the solution')
-l0 = diag(L);
-[id,~] = find(l0>1e-05);
-nb_nnz = nnz(l0>1e-05);
-disp(nb_nnz)
-
+[V_SDP,~,sqrt_eigenvalues_SDP,~] = embed(x,id_train,bw,r,n_it,tol)
 
 %%%%%%%%%%%%%%%%%%%%%%%%% % Embedding of the training set %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-u0 =  l0(1)*V(:,1);
-u1 =  l0(2)*V(:,2);
-u_train = [u0 u1];
-figure;scatter(u0,u1,[],truth45(id_train),'.'); title('SDP embedding') 
+
+figure;scatter(V_SDP(:,1),V_SDP(:,2),[],truth45(id_train),'.'); title('SDP embedding') 
 colormap jet;
 %place = '/Figures/mnist45_SDP_embeding.png';
 %saveas(gcf,place)
@@ -72,6 +42,7 @@ id_oos = setdiff(1:N_tot,id_train);
 n_oos = length(id_oos);
 
 % initialization
+u_train = V_SDP;
 u_oos = zeros(n_oos,dim);
 d = zeros(n_train,1);
 
@@ -95,7 +66,7 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%% Plotting %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure;
-scatter(u0,u1,3,truth45(id_train),'o','filled');
+scatter(V_SDP(:,1),V_SDP(:,2),3,truth45(id_train),'o','filled');
 colormap jet;hold on
 xlim([-0.03 0.04])
 ylim([-0.03 0.03])
@@ -120,7 +91,7 @@ place = 'Figures/mnist45_oos.png';
 saveas(gcf,place);
 %close all;
 
-figure;scatter(u0,u1,3,truth45(id_train),'o','filled');colormap jet;hold on
+figure;scatter(V_SDP(:,1),V_SDP(:,2),3,truth45(id_train),'o','filled');colormap jet;hold on
 xl = get(gca,'XLabel');
 xlFontSize = get(xl,'FontSize');
 xAX = get(gca,'XAxis');
