@@ -2,7 +2,6 @@
 %Code for replicating the SDP embedding of MNIST digits 1 and 4
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear;close all;
-clc
 
 addpath(genpath('Data'))  
 addpath(genpath('Algo'))  
@@ -26,8 +25,9 @@ r = 100;
 n_train = floor(0.3*N_tot);
 id_train =  datasample(1:N_tot,n_train,'Replace',false);
 
-[V_SDP,~,sqrt_eigenvalues_SDP,~] = embed(x,id_train,bw,r,n_it,tol)
+[V_SDP,~,sqrt_eigenvalues_SDP,~,deg] = embed(x,id_train,bw,r,n_it,tol);
 
+v0 = sqrt(deg/sum(deg));
 %%%%%%%%%%%%%%%%%%%%%%%%% % Embedding of the training set %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 

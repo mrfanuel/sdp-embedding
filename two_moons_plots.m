@@ -64,7 +64,7 @@ r = 30; % maimal rank of the solution
 n_it = 5000; % maximal number of iterations
 tol = 1e-09; % tolerance on relative difference between 2 iterates
 
-[V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM] = embed(X,id_train,bw,r,n_it,tol)
+[V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,~] = embed(X,id_train,bw,r,n_it,tol)
 
 
 V_DM_proj = V_DM;% normalize the rows of V_DM_proj
