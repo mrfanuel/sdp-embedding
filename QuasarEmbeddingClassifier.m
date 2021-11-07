@@ -36,55 +36,16 @@ for rep = 1:n_rep
     n_oos = length(id_oos);
     y_oos = Y(id_oos);
 
-    % defining kernels
-    X_train = X(id_train,:);
-    d_train = pdist2(X_train,X_train);
-
-    k = exp(-d_train.^2/bw^2);
-
-    deg = sum(k,2);
-    v0 = sqrt(deg/sum(deg));
-
-    k_norm = diag(1./sqrt(deg))*k*diag(1./sqrt(deg));
-    K = (k_norm-v0*v0');% diffusion kernel matrix
-
-
-    % SDP solution
-    diagonal = diag(K);
 
     n_it = 5000; % maximal number of iterations
     tol = 1e-09; % tolerance on relative difference between 2 iterates
-    tic
-    % Initialization
     r = 30;
-    H0 = rand(n_train,r)-0.5; 
-    H0 = diag(sqrt(diagonal))*H0./sqrt(sum(H0.^2,2));
 
-    % Iterations
-    [H,~] = ProjPowerIterations(K,H0,diagonal,n_it,tol);
-    %[Answer,normgradient] = IsLocalMaximum(H,Q,diagonal); % checking optimality 
-
-    % SVD 
-    [V,L] = svd(H);
-    l = diag(L);
-    nb_l = nnz(l>1e-08);
-    fprintf('Eigenvalues of PCA: %d \n',nb_l)
-    disp(l(1:nb_l))
-    toc
-    % kernel matrix
-    rho = H*H';
-
-    % Plotting
-    u0 =  l(1)*V(:,1);
-    u1 =  l(2)*V(:,2);
-    
-    [X_c,Y_c] = eigs(k_norm);
-    
-    lambda_DM = diag(Y_c);
+    [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,deg] = embed(X,id_train,bw,r,n_it,tol);
 
     
     s=3; % marker size %s = mean(deg)*deg/(sum(deg));
-    figure;scatter(u0,u1,s, y_train,'o','filled'); %title('SDP embedding')       
+    figure;scatter(V_SDP(:,1),V_SDP(:,2),s, y_train,'o','filled'); %title('SDP embedding')       
     %colorbar;
     colormap jet
 
@@ -92,48 +53,36 @@ for rep = 1:n_rep
     %
 
     figure; 
-    scatter(X_c(:,2),X_c(:,3),s,y_train,'o','filled')
+    scatter(V_DM(:,1),V_DM(:,2),s,y_train,'o','filled')
     %colorbar; 
     colormap jet
     %title('Diffusion embedding')   
     saveas(gcf,'quasarDiffusion','epsc')
 
-
-    %
-
-
-    u_train = [u0 u1];
-
-    dim = 2;
-    id_oos = setdiff(1:N,id_train);
-
-    % initialization
-    %u_oos = zeros(n_oos,dim);
-    %d = zeros(n_train,1);
+    u_train = V_SDP;
 
     % Out-of-sample
+    id_oos = setdiff(1:N,id_train);
+
     X_train = X(id_train,:);
     X_oos = X(id_oos,:);
 
+    v0 = sqrt(deg/sum(deg));
+    u_oos = oos(X_oos,X_train,u_train,deg,v0,bw);
+
+    % extension  DM
     d_oos_x = pdist2(X_oos,X_train);
     k_oos = exp(-d_oos_x.^2/bw^2); 
     deg_oos = sum(k_oos,2);
+    
     k_ext_norm = diag(1./sqrt(deg_oos))*k_oos*diag(1./sqrt(deg));
-    v0_ext = k_ext_norm*v0;
-
-    K_ext = k_ext_norm -v0_ext*v0';
-    nor = 1./deg_oos-deg_oos/(sum(deg));
-    u_oos_0 = K_ext*u_train;
-    M = sum(u_oos_0.^2,2);
-    u_oos = diag(sqrt(nor))*u_oos_0./sqrt(M);
-
-    % extension  DM
-
-    X_c_oos_0 = (1/lambda_DM(2))*k_ext_norm*X_c(:,2);
-    X_c_oos_1 = (1/lambda_DM(3))*k_ext_norm*X_c(:,3);
+    lambda_DM = eigenvalues_DM;
+    X_c = V_DM
+    X_c_oos_0 = (1/lambda_DM(1))*k_ext_norm*X_c(:,1);
+    X_c_oos_1 = (1/lambda_DM(2))*k_ext_norm*X_c(:,2);
 
     X_c_oos = [X_c_oos_0 X_c_oos_1];
-    X_c_train = [X_c(:,2) X_c(:,3)];
+    X_c_train = [X_c(:,1) X_c(:,2)];
 
     % Classifier
     Mdl_DM = fitcknn(X_c_train,y_train,'NumNeighbors',nb_nb,'Standardize',0)
