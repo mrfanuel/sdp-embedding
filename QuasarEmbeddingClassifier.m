@@ -9,7 +9,7 @@ load HTRU_2.mat
 
 X = zscore(X);
 
-bw = 10
+bw = 5 % or 10
 nb_nb = 5
 %%
 d_tot = pdist2(X,X);
@@ -49,7 +49,7 @@ for rep = 1:n_rep
     %colorbar;
     colormap jet
 
-    saveas(gcf,'quasarSDP','epsc')
+    saveas(gcf,'Figures/quasarSDP','epsc')
     %
 
     figure; 
@@ -57,7 +57,7 @@ for rep = 1:n_rep
     %colorbar; 
     colormap jet
     %title('Diffusion embedding')   
-    saveas(gcf,'quasarDiffusion','epsc')
+    saveas(gcf,'Figures/quasarDiffusion','epsc')
 
     u_train = V_SDP;
 
@@ -74,7 +74,7 @@ for rep = 1:n_rep
     d_oos_x = pdist2(X_oos,X_train);
     k_oos = exp(-d_oos_x.^2/bw^2); 
     deg_oos = sum(k_oos,2);
-    
+
     k_ext_norm = diag(1./sqrt(deg_oos))*k_oos*diag(1./sqrt(deg));
     lambda_DM = eigenvalues_DM;
     X_c = V_DM
@@ -98,14 +98,14 @@ for rep = 1:n_rep
     %colorbar;
     colormap jet
 
-    saveas(gcf,'quasarDMoos','epsc')
+    saveas(gcf,'Figures/quasarDMoos','epsc')
 
    
     scatter(u_oos(:,1),u_oos(:,2),s, y_oos,'o','filled'); %title('SDP embedding')       
     %colorbar;
     colormap jet
 
-    saveas(gcf,'quasarSDPoos','epsc')
+    saveas(gcf,'Figures/quasarSDPoos','epsc')
 
     % Classifier
     Mdl_SDP = fitcknn(u_train,y_train,'NumNeighbors',nb_nb,'Standardize',0)
@@ -124,7 +124,7 @@ disp('precision plus class SDP')
 mean(precision_plus_class_SDP)
 std(precision_plus_class_SDP)
 
-disp('precision plus class SDP')
+disp('recall plus class SDP')
 mean(recall_plus_class_SDP)
 std(recall_plus_class_SDP)
 
@@ -133,6 +133,6 @@ disp('precision plus class DM')
 mean(precision_plus_class_DM)
 std(precision_plus_class_DM)
 
-disp('precision plus class DM')
+disp('recall plus class DM')
 mean(recall_plus_class_DM)
 std(recall_plus_class_DM)
