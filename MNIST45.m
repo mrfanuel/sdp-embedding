@@ -28,14 +28,7 @@ id_train =  datasample(1:N_tot,n_train,'Replace',false);
 [V_SDP,~,sqrt_eigenvalues_SDP,~,deg] = embed(x,id_train,bw,r,n_it,tol);
 
 v0 = sqrt(deg/sum(deg));
-%%%%%%%%%%%%%%%%%%%%%%%%% % Embedding of the training set %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-figure;scatter(V_SDP(:,1),V_SDP(:,2),[],truth45(id_train),'.'); title('SDP embedding') 
-colormap jet;
-%place = '/Figures/mnist45_SDP_embeding.png';
-%saveas(gcf,place)
-close all;
 %%%%%%%%%%%%%%%%%%%%%%%%%% Out-of-sample extension %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 dim = 2;
 id_oos = setdiff(1:N_tot,id_train);
@@ -74,7 +67,6 @@ set(zAX, 'FontSize', 15);
 
 place = 'Figures/mnist45_oos.png';
 saveas(gcf,place);
-%close all;
 
 figure;scatter(V_SDP(:,1),V_SDP(:,2),3,truth45(id_train),'o','filled');colormap jet;hold on
 xl = get(gca,'XLabel');
@@ -88,24 +80,13 @@ set(yAX, 'FontSize', 15);
 set(zAX, 'FontSize', 15);
 place = 'Figures/mnist45_training.png';
 saveas(gcf,place);
-%close all;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%% Training of nnb classifier %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%Mdl = fitcsvm(u_train,truth45(id_train));
 Mdl = fitcknn(u_train,truth45(id_train),'NumNeighbors',5,'Standardize',1)
 
 Class = predict(Mdl, u_oos);
 disp('accuracy')
 disp(1-nnz(Class-truth45(id_oos))/length(Class))
 
-
-%x1range = min(u_oos(:,1)):.0001:max(u_oos(:,1));
-%x2range = min(u_oos(:,2)):.0001:max(u_oos(:,2));
-%[xx1, xx2] = meshgrid(x1range,x2range);
-%XGrid = [xx1(:) xx2(:)];
-%predicted = predict(Mdl,XGrid);
-%figure;
-%gscatter(xx1(:), xx2(:), predicted,'gray');colormap jet;hold on
-%scatter(u0,u1,3,truth45(id_train),'o','filled');colormap jet
 
