@@ -3,15 +3,15 @@ addpath('Data')
 addpath('Algo')
 addpath('Utils')  
 
-bw = 0.3
+bw = 0.5
 
 % number of clusters
 k_clusters = 2;
-n_rep = 10; % number of times k-means is repeated
+n_rep = 1; % number of times k-means is repeated
 
 
-sigma = .5;
-n = 500;
+sigma = .2;
+n = 200;
 
 sig = 1/6
 [X,Y] = twomoons_matlab(n,sig);
@@ -43,7 +43,6 @@ V_DM_proj = V_DM_proj./sqrt(sum(abs(V_DM_proj).^2,2));
 idx_SDP = kmeans(V_SDP,k_clusters);
 idx_DM = kmeans(V_DM,k_clusters);
 idx_DM_proj = kmeans(V_DM_proj,k_clusters);
-
 
 
 k = 2

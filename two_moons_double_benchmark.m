@@ -7,12 +7,12 @@ addpath('Utils')
 k_clusters = 2;
 
 
-n = 200; % good for sparsity
+n = 200; % 200 good for sparsity
 %n = 1000;
-nb_datasets = 20;
+nb_datasets = 20
 n_spec = 4;
 
-range_bw = 0.1:0.05:1;
+range_bw = 0.05:0.05:1;
 nb_bw = length(range_bw);
 
 sqrt_eigs_SDP = zeros(nb_bw,n_spec);
@@ -39,7 +39,7 @@ std_nmi_DM_proj = zeros(nb_bw,1);
 
 
 for m = 1:nb_datasets
-    sig = 1/6
+    sig = 1/6;
     [X,Y] = twomoons_matlab(n,sig);
     X = zscore(X);
 
@@ -54,6 +54,7 @@ for m = 1:nb_datasets
 
     for i = 1:length(range_bw)
         bw = range_bw(i);
+        disp(bw)
         r = 30; % maximal rank of the solution
         n_it = 5000; % maximal number of iterations
         tol = 1e-09; % tolerance on relative difference between 2 iterates
@@ -120,52 +121,31 @@ for i = 1:length(range_bw)
 end
 
 figure;
-errorbar(range_bw,mean_nmi_input*ones(size(range_bw)),std_nmi_input*ones(size(range_bw)),'k','DisplayName','kmeans')
+errorbar(range_bw,mean_nmi_input*ones(size(range_bw)),std_nmi_input*ones(size(range_bw)),'k','DisplayName','kmeans raw data')
 ylim([0 1])
 hold on;
 errorbar(range_bw,mean_nmi_SDP,std_nmi_SDP,'-bo','DisplayName','mean SDP')
 ylim([0 1])
 errorbar(range_bw,mean_nmi_DM,std_nmi_DM,'-rs','DisplayName','mean DM')
 ylim([0 1])
+legend.FontSize = 12;
 legend
 
 saveas(gcf,'Figures/mean_twomoons_gaussians_benchmark','epsc')
 
 figure;
-errorbar(range_bw,mean_nmi_input*ones(size(range_bw)),std_nmi_input*ones(size(range_bw)),'k','DisplayName','kmeans')
+errorbar(range_bw,mean_nmi_input*ones(size(range_bw)),std_nmi_input*ones(size(range_bw)),'k','DisplayName','kmeans raw data')
 ylim([0 1])
 hold on;
-errorbar(range_bw,mean_nmi_SDP_proj,std_nmi_SDP_proj,'-b*','DisplayName','mean SDP + proj')
+errorbar(range_bw,mean_nmi_SDP_proj,std_nmi_SDP_proj,'-bo','DisplayName','mean SDP + proj')
 ylim([0 1])
-errorbar(range_bw,mean_nmi_DM_proj,std_nmi_DM_proj,'-rd','DisplayName','mean DM + proj')
+errorbar(range_bw,mean_nmi_DM_proj,std_nmi_DM_proj,'-rs','DisplayName','mean DM + proj')
 ylim([0 1])
+legend.FontSize = 12;
 legend
 
 saveas(gcf,'Figures/mean_proj_twomoons_gaussians_benchmark','epsc')
 
-figure;
-errorbar(range_bw,mean_nmi_input*ones(size(range_bw)),std_nmi_input*ones(size(range_bw)),'k','DisplayName','kmeans')
-ylim([0 1])
-hold on;
-plot(range_bw,median_nmi_SDP,'-bo','DisplayName','median SDP')
-ylim([0 1])
-plot(range_bw,median_nmi_DM,'-rs','DisplayName','median DM')
-ylim([0 1])
-legend
-
-saveas(gcf,'Figures/median_twomoons_gaussians_benchmark','epsc')
-
-figure;
-errorbar(range_bw,mean_nmi_input*ones(size(range_bw)),std_nmi_input*ones(size(range_bw)),'k','DisplayName','kmeans')
-ylim([0 1])
-hold on;
-plot(range_bw,median_nmi_SDP_proj,'-bo','DisplayName','median SDP + proj')
-ylim([0 1])
-plot(range_bw,median_nmi_DM_proj,'-rd','DisplayName','median DM + proj')
-ylim([0 1])
-legend
-
-saveas(gcf,'Figures/median_proj_twomoons_gaussians_benchmark','epsc')
 
 figure;
 plot(range_bw, sqrt_eigs_SDP)

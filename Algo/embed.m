@@ -58,10 +58,21 @@ function [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,deg] = embed(X,id_train
     disp('eigenvalues of diffusion op')
     disp(lambda_DM)
 
+
     if nb_comp == 2
-        V_DM = X_c(:,1:2)*diag(lambda_DM(1:2));
+        if isnan(lambda_DM)
+            % if spectral algo does not converge
+            V_DM = ones(size(X_c(:,1:2)));
+        else
+            V_DM = X_c(:,1:2)*diag(lambda_DM(1:2));
+        end
     else
-        V_DM = X_c(:,1:3)*diag(lambda_DM(1:3));
+        if isnan(lambda_DM)
+            % if spectral algo does not converge
+            V_DM = ones(size(X_c(:,1:3)));
+        else
+            V_DM = X_c(:,1:3)*diag(lambda_DM(1:3));
+        end
     end
 
 end
