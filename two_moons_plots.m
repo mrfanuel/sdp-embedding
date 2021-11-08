@@ -3,47 +3,54 @@ addpath('Data')
 addpath('Algo')
 addpath('Utils')  
 
-bw = 0.2;
+bw = 0.05;
 
 % number of clusters
 k_clusters = 2;
 n_rep = 10; % number of times k-means is repeated
 
 
-center_up = [-1.; 0];
-center_down = [1.; 0];
-nb_sample = 500;
-radius = 1.5;
-noise_eps = 0.9;
 
-[X,Y] = gen_two_moons(center_up,center_down,radius,nb_sample,noise_eps);
-%
-n_noise = 50; 
+homemade = false
+if homemade
+    [X,Y] = gen_two_moons(center_up,center_down,radius,nb_sample,noise_eps);
+    %
+    %% data generation
+    center_up = [-1.; 0];
+    center_down = [1.; 0];
+    nb_sample = 500;
+    radius = 1.5;
+    noise_eps = 0.9;
+    n_noise = 50; 
 
-center_up_noise = center_up' + [0 1.5];
-center_down_noise = center_down' + [0 -1.5];
+    center_up_noise = center_up' + [0 1.5];
+    center_down_noise = center_down' + [0 -1.5];
 
-X_gaussian_up = center_up_noise + 1.5*randn(n_noise,2);
-X_gaussian_down = center_down_noise  + 1.5*randn(n_noise,2);
+    sigma = 1.;
+    X_gaussian_up = center_up_noise + sigma*randn(n_noise,2);
+    X_gaussian_down = center_down_noise  + sigma*randn(n_noise,2);
 
-X_gaussian = [X_gaussian_up;X_gaussian_down];
-Y_gaussian = [ones(n_noise,1);-ones(n_noise,1)];
+    X_gaussian = [X_gaussian_up;X_gaussian_down];
+    Y_gaussian = [ones(n_noise,1);-ones(n_noise,1)];
 
-gaussians = true;
-moons = true;
-
-
-if gaussians && ~moons
-    disp("only gaussians")
-    X = X_gaussian;
-    Y = Y_gaussian;    
-elseif moons && gaussians
-    disp("gaussians and moons")
-    X = [X ;X_gaussian];
-    Y = [Y; Y_gaussian];
-elseif moons && ~gaussians
-    disp("only moons")
+    gaussians = true;
+    moons = true;
+    if gaussians && ~moons
+        disp("only gaussians")
+        X = X_gaussian;
+        Y = Y_gaussian;    
+    elseif moons && gaussians
+        disp("gaussians and moons")
+        X = [X ;X_gaussian];
+        Y = [Y; Y_gaussian];
+    elseif moons && ~gaussians
+        disp("only moons")
+    end
+else
+    n = 500;
+    [X,Y] = twomoons_matlab(n);
 end
+
 
 X = zscore(X);
 

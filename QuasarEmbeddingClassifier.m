@@ -9,7 +9,7 @@ load HTRU_2.mat
 
 X = zscore(X);
 
-bw = 5 % or 10
+bw = 10 % or 5
 nb_nb = 5
 %%
 d_tot = pdist2(X,X);
