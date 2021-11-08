@@ -3,55 +3,18 @@ addpath('Data')
 addpath('Algo')
 addpath('Utils')  
 
-bw = 0.05;
+bw = 0.3
 
 % number of clusters
 k_clusters = 2;
 n_rep = 10; % number of times k-means is repeated
 
 
+sigma = .5;
+n = 500;
 
-homemade = false
-if homemade
-    [X,Y] = gen_two_moons(center_up,center_down,radius,nb_sample,noise_eps);
-    %
-    %% data generation
-    center_up = [-1.; 0];
-    center_down = [1.; 0];
-    nb_sample = 500;
-    radius = 1.5;
-    noise_eps = 0.9;
-    n_noise = 50; 
-
-    center_up_noise = center_up' + [0 1.5];
-    center_down_noise = center_down' + [0 -1.5];
-
-    sigma = 1.;
-    X_gaussian_up = center_up_noise + sigma*randn(n_noise,2);
-    X_gaussian_down = center_down_noise  + sigma*randn(n_noise,2);
-
-    X_gaussian = [X_gaussian_up;X_gaussian_down];
-    Y_gaussian = [ones(n_noise,1);-ones(n_noise,1)];
-
-    gaussians = true;
-    moons = true;
-    if gaussians && ~moons
-        disp("only gaussians")
-        X = X_gaussian;
-        Y = Y_gaussian;    
-    elseif moons && gaussians
-        disp("gaussians and moons")
-        X = [X ;X_gaussian];
-        Y = [Y; Y_gaussian];
-    elseif moons && ~gaussians
-        disp("only moons")
-    end
-else
-    n = 500;
-    [X,Y] = twomoons_matlab(n);
-end
-
-
+sig = 1/6
+[X,Y] = twomoons_matlab(n,sig);
 X = zscore(X);
 
 
@@ -70,8 +33,8 @@ y_train = Y(id_train);
 r = 30; % maimal rank of the solution
 n_it = 5000; % maximal number of iterations
 tol = 1e-09; % tolerance on relative difference between 2 iterates
-
-[V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,~] = embed(X,id_train,bw,r,n_it,tol)
+n_comp = 3;
+[V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,~] = embed(X,id_train,bw,r,n_it,tol,n_comp)
 
 
 V_DM_proj = V_DM;% normalize the rows of V_DM_proj

@@ -1,4 +1,4 @@
-function [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,deg] = embed(X,id_train,bw,r,n_it,tol)
+function [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,deg] = embed(X,id_train,bw,r,n_it,tol,nb_comp)
     
     d_tot = pdist2(X,X);
     N = size(X,1);
@@ -42,7 +42,13 @@ function [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,deg] = embed(X,id_train
     % Plotting
     u0 =  l(1)*V(:,1);
     u1 =  l(2)*V(:,2);
-    V_SDP = [u0 u1];
+    u2 =  l(3)*V(:,3);
+    if nb_comp == 2
+        V_SDP = [u0 u1];
+    else
+        V_SDP = [u0 u1 u2];
+    end
+
 
     % Diffusion maps
     [X_c,Y_c] = eigs(K);
@@ -52,7 +58,11 @@ function [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,deg] = embed(X,id_train
     disp('eigenvalues of diffusion op')
     disp(lambda_DM)
 
-    V_DM = X_c(:,1:2);
+    if nb_comp == 2
+        V_DM = X_c(:,1:2)*diag(lambda_DM(1:2));
+    else
+        V_DM = X_c(:,1:3)*diag(lambda_DM(1:3));
+    end
 
 end
 

@@ -5,72 +5,14 @@ addpath('Utils')
 
 % number of clusters
 k_clusters = 2;
-n_rep = 20; % number of times k-means is repeated
-
-gaussians = false;
-moons = true;
-
-homemade = false
-
-n_noise = 30; 
-sigma = .5;
-if homemade
-
-    %% data generation
-    center_up = [-1.; 0];
-    center_down = [1.; 0];
-    nb_sample = 500;
-    radius = 1.5;
-    noise_eps = 0.9;
-    [X,Y] = gen_two_moons(center_up,center_down,radius,nb_sample,noise_eps);
-    %
-    center_up_noise = center_up' + [0 1.5];
-    center_down_noise = center_down' + [0 -1.5];
-
-    
-    X_gaussian_up = center_up_noise + sigma*randn(n_noise,2);
-    X_gaussian_down = center_down_noise  + sigma*randn(n_noise,2);
-
-    X_gaussian = [X_gaussian_up;X_gaussian_down];
-    Y_gaussian = [ones(n_noise,1);-ones(n_noise,1)];
-
-    if gaussians && ~moons
-        disp("only gaussians")
-        X = X_gaussian;
-        Y = Y_gaussian;    
-    elseif moons && gaussians
-        disp("gaussians and moons")
-        X = [X ;X_gaussian];
-        Y = [Y; Y_gaussian];
-    elseif moons && ~gaussians
-        disp("only moons")
-    end
-else
-    n = 500;
-    %sig = 1/6;
-    sig = 1/4;
-    [X,Y] = twomoons_matlab(n,sig);
-
-    X_gaussian_up = [-0.5 1.5] + sigma*randn(n_noise,2);
-    X_gaussian_down = [0.5 -2]  + sigma*randn(n_noise,2);
-
-        X_gaussian = [X_gaussian_down;X_gaussian_up];
-        Y_gaussian = [ones(n_noise,1);2*ones(n_noise,1)];
-    if gaussians && ~moons
-        disp("only gaussians")
-        X = X_gaussian;
-        Y = Y_gaussian;    
-    elseif moons && gaussians
-        disp("gaussians and moons")
-        X = [X ;X_gaussian];
-        Y = [Y; Y_gaussian];
-    elseif moons && ~gaussians
-        disp("only moons")
-    end
+n_rep = 5; % number of times k-means is repeated
 
 
-end
+%n = 200; % good for sparsity
+n = 1000;
 
+sig = 1/6
+[X,Y] = twomoons_matlab(n,sig);
 X = zscore(X);
 
 %% Plot raw data
@@ -83,7 +25,7 @@ saveas(gcf,'Figures/twomoons','epsc')
 
 %% Initialization
 
-range_bw = 0.01:0.05:1;
+range_bw = 0.1:0.05:1;
 
 n_spec = 4;
 sqrt_eigs_SDP = zeros(length(range_bw),n_spec);
@@ -116,7 +58,8 @@ for i = 1:length(range_bw)
     tol = 1e-09; % tolerance on relative difference between 2 iterates
     N = size(X,1);
     id_train = 1:N;
-    [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,~] = embed(X,id_train,bw,r,n_it,tol);
+    nb_comp = 3;
+    [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,~] = embed(X,id_train,bw,r,n_it,tol,nb_comp);
 
     sqrt_eigs_SDP(i,:) = sqrt_eigenvalues_SDP(1:n_spec);
     eigs_DM(i,:) = eigenvalues_DM(1:n_spec);
