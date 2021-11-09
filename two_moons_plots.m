@@ -3,7 +3,7 @@ addpath('Data')
 addpath('Algo')
 addpath('Utils')  
 
-bw = 0.5
+bw = 0.1
 
 % number of clusters
 k_clusters = 2;
@@ -21,6 +21,7 @@ X = zscore(X);
 figure;
 scatter(X(:,1),X(:,2),[],Y,'.')
 colormap jet
+matlab2tikz('Figures/twomoons.tikz')
 
 saveas(gcf,'Figures/twomoons','epsc')
 
@@ -70,6 +71,7 @@ scatter(V_SDP(id1,1),V_SDP(id1,2),s, y_train(id1),'o','filled');
 hold on;
 scatter(V_SDP(id2,1),V_SDP(id2,2),s, y_train(id2),'s'); 
 colormap jet
+matlab2tikz('Figures/twomoonsSDP.tikz')
 saveas(gcf,'Figures/twomoonsSDP','epsc')
 
 id1 = find(idx_DM==1);
@@ -79,6 +81,7 @@ scatter(V_DM(id1,1),V_DM(id1,2),s, y_train(id1),'o','filled');
 hold on;
 scatter(V_DM(id2,1),V_DM(id2,2),s, y_train(id2),'s'); 
 colormap jet
+matlab2tikz('Figures/twomoonsDiffusion.tikz')
 saveas(gcf,'Figures/twomoonsDiffusion','epsc')
 
 id1 = find(idx_DM_proj==1);
@@ -88,6 +91,7 @@ scatter(V_DM_proj(id1,1),V_DM_proj(id1,2),s, y_train(id1),'o','filled');
 hold on;
 scatter(V_DM_proj(id2,1),V_DM_proj(id2,2),s, y_train(id2),'s'); 
 colormap jet
+matlab2tikz('Figures/twomoonsDiffusionProj.tikz')
 saveas(gcf,'Figures/twomoonsDiffusionProj','epsc')
 
 

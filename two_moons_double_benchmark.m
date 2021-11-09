@@ -8,8 +8,7 @@ k_clusters = 2;
 
 
 n = 200; % 200 good for sparsity
-%n = 1000;
-nb_datasets = 20
+nb_datasets = 10
 n_spec = 4;
 
 range_bw = 0.05:0.05:1;
@@ -60,10 +59,11 @@ for m = 1:nb_datasets
         tol = 1e-09; % tolerance on relative difference between 2 iterates
         N = size(X,1);
         id_train = 1:N;
-        nb_comp = 3;
+        nb_comp = 2;
         [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,~] = embed(X,id_train,bw,r,n_it,tol,nb_comp);
 
-        sqrt_eigs_SDP(i,:) = sqrt_eigenvalues_SDP(1:n_spec);
+        eigenvalues_SDP = sqrt_eigenvalues_SDP.^2
+        eigs_SDP(i,:) = eigenvalues_SDP(1:n_spec)/sum(eigenvalues_SDP);
         eigs_DM(i,:) = eigenvalues_DM(1:n_spec);
 
         V_DM_proj = V_DM;% normalize the rows of V_DM_proj
@@ -128,9 +128,9 @@ errorbar(range_bw,mean_nmi_SDP,std_nmi_SDP,'-bo','DisplayName','mean SDP')
 ylim([0 1])
 errorbar(range_bw,mean_nmi_DM,std_nmi_DM,'-rs','DisplayName','mean DM')
 ylim([0 1])
-legend.FontSize = 12;
-legend
+legend('nmi kmeans raw data','nmi SDP','nmi DM')
 
+matlab2tikz('Figures/mean_twomoons_gaussians_benchmark.tikz')
 saveas(gcf,'Figures/mean_twomoons_gaussians_benchmark','epsc')
 
 figure;
@@ -141,17 +141,19 @@ errorbar(range_bw,mean_nmi_SDP_proj,std_nmi_SDP_proj,'-bo','DisplayName','mean S
 ylim([0 1])
 errorbar(range_bw,mean_nmi_DM_proj,std_nmi_DM_proj,'-rs','DisplayName','mean DM + proj')
 ylim([0 1])
-legend.FontSize = 12;
-legend
+legend('nmi kmeans raw data','nmi SDP+proj','nmi DM+proj')
 
+matlab2tikz('Figures/mean_proj_twomoons_gaussians_benchmark.tikz')
 saveas(gcf,'Figures/mean_proj_twomoons_gaussians_benchmark','epsc')
 
 
 figure;
-plot(range_bw, sqrt_eigs_SDP)
-saveas(gcf,'Figures/sqrt_eigs_SDP_twomoons_gaussians_benchmark','epsc')
+plot(range_bw, eigs_SDP,'.-','MarkerSize',15)
+matlab2tikz('Figures/eigs_SDP_twomoons_gaussians_benchmark.tikz')
+saveas(gcf,'Figures/eigs_SDP_twomoons_gaussians_benchmark','epsc')
 
 figure;
+plot(range_bw, eigs_DM,'.-','MarkerSize',15)
 
-plot(range_bw, eigs_DM)
+matlab2tikz('Figures/eigs_DM_twomoons_gaussians_benchmark.tikz')
 saveas(gcf,'Figures/eigs_DM_twomoons_gaussians_benchmark','epsc')
