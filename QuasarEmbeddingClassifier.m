@@ -40,8 +40,9 @@ for rep = 1:n_rep
     n_it = 5000; % maximal number of iterations
     tol = 1e-09; % tolerance on relative difference between 2 iterates
     r = 30;
-
-    [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,deg] = embed(X,id_train,bw,r,n_it,tol);
+    nb_comp = 2;
+    
+    [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,deg] = embed(X,id_train,bw,r,n_it,tol,nb_comp);
 
     
     s=3; % marker size %s = mean(deg)*deg/(sum(deg));
