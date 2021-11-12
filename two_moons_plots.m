@@ -47,7 +47,6 @@ idx_DM_proj = kmeans(V_DM_proj,k_clusters);
 
 
 k = 2
-
 idx_SDP = kmeans(V_SDP,k);
 
 disp('nmi SDP')

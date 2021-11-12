@@ -26,7 +26,6 @@ truth(id3)=3;
 range_bw = 0.7:0.1:10;
 nb_bw = length(range_bw);
 spectrum = zeros(nb_bw,3);
-FroNormDifferenceIterate = zeros(nb_bw,1);
 
 
 for i=1:nb_bw
