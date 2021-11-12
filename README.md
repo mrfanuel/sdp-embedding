@@ -1,5 +1,6 @@
 # SDP embedding for dimensionality reduction
 This is the code associated to the following paper:
+
 Michaël Fanuel, Antoine Aspeel, Jean-Charles Delvenne, Johan A.K. Suykens, **Positive semi-definite embedding for dimensionality reduction and out-of-sample extensions**, [arxiv](https://arxiv.org/abs/1711.07271)
 
 ### datasets
