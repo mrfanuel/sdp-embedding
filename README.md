@@ -14,4 +14,5 @@ Michaël Fanuel, Antoine Aspeel, Jean-Charles Delvenne, Johan A.K. Suykens, **Po
   
   
 ### Dependencies
-Statistics and Machine Learning Toolbox
+- MATLAB R2019b
+- Statistics and Machine Learning Toolbox
