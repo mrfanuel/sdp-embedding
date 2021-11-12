@@ -8,14 +8,12 @@ addpath('Algo')
 load HTRU_2.mat
 
 X = zscore(X);
+N = size(X,1);
 
 bw = 10 % or 5
 nb_nb = 5
-%%
+
 d_tot = pdist2(X,X);
-
-N = size(X,1);
-
 
 % selecting a subset of the digits to compute the embedding
 n_train = floor(0.7*N);
@@ -45,9 +43,8 @@ for rep = 1:n_rep
     [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,deg] = embed(X,id_train,bw,r,n_it,tol,nb_comp);
 
     
-    s=3; % marker size %s = mean(deg)*deg/(sum(deg));
-    figure;scatter(V_SDP(:,1),V_SDP(:,2),s, y_train,'o','filled'); %title('SDP embedding')       
-    %colorbar;
+    s=3; % marker size 
+    figure;scatter(V_SDP(:,1),V_SDP(:,2),s, y_train,'o','filled'); 
     colormap jet
 
     saveas(gcf,'Figures/quasarSDP','epsc')
@@ -55,14 +52,12 @@ for rep = 1:n_rep
 
     figure; 
     scatter(V_DM(:,1),V_DM(:,2),s,y_train,'o','filled')
-    %colorbar; 
     colormap jet
-    %title('Diffusion embedding')   
     saveas(gcf,'Figures/quasarDiffusion','epsc')
 
     u_train = V_SDP;
 
-    % Out-of-sample
+    % Out-of-sample SDP embedding
     id_oos = setdiff(1:N,id_train);
 
     X_train = X(id_train,:);
@@ -71,7 +66,7 @@ for rep = 1:n_rep
     v0 = sqrt(deg/sum(deg));
     u_oos = oos(X_oos,X_train,u_train,deg,v0,bw);
 
-    % extension  DM
+    % extension  of diffusion embedding
     d_oos_x = pdist2(X_oos,X_train);
     k_oos = exp(-d_oos_x.^2/bw^2); 
     deg_oos = sum(k_oos,2);
@@ -79,6 +74,7 @@ for rep = 1:n_rep
     k_ext_norm = diag(1./sqrt(deg_oos))*k_oos*diag(1./sqrt(deg));
     lambda_DM = eigenvalues_DM;
     X_c = V_DM
+    % Nyström-type extension
     X_c_oos_0 = (1/lambda_DM(1))*k_ext_norm*X_c(:,1);
     X_c_oos_1 = (1/lambda_DM(2))*k_ext_norm*X_c(:,2);
 
@@ -95,15 +91,13 @@ for rep = 1:n_rep
     precision_plus_class_DM(rep) = precision_DM(2);
     recall_plus_class_DM(rep) = recall_DM(2);
 
-    scatter(X_c_oos_0,X_c_oos_1,s, y_oos,'o','filled'); %title('SDP embedding')       
-    %colorbar;
+    scatter(X_c_oos_0,X_c_oos_1,s, y_oos,'o','filled'); 
     colormap jet
 
     saveas(gcf,'Figures/quasarDMoos','epsc')
 
    
-    scatter(u_oos(:,1),u_oos(:,2),s, y_oos,'o','filled'); %title('SDP embedding')       
-    %colorbar;
+    scatter(u_oos(:,1),u_oos(:,2),s, y_oos,'o','filled');    
     colormap jet
 
     saveas(gcf,'Figures/quasarSDPoos','epsc')
