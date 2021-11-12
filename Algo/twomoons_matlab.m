@@ -1,3 +1,4 @@
+% Source: https://nl.mathworks.com/help/stats/label-data-using-semi-supervised-learning-techniques.html where sig = 1/6
 function [X,label] = twomoons_matlab(n,sig) % Generate two moons, with n points in each moon.
 
     % Specify the radius and relevant angles for the two moons.
