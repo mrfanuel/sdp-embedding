@@ -14,82 +14,30 @@ dx = 2/n_tot;
 x = ((-1+dx/2):dx: (1-dx/2))';
 N = length(x);
 
-%% diffusion kernel matrix
-d = pdist2(x,x);
-k = exp(-d.^2/bw^2);
-deg = dx*sum(k,2);
-
-v0 = sqrt(deg/sum(dx*deg));
-
-k_norm = diag(1./sqrt(deg))*k*diag(1./sqrt(deg));
-K = (k_norm-v0*v0');
 
 %% SDP solution
-
-diagonal = diag(K);
-
-n_it = 50000; % maximal number of iterations
-tol = 1e-09; % tolerance on relative difference between 2 iterates
-
-% Initialization
-r = 10;
-H0 = rand(N,r)-0.5; 
-H0 = diag(sqrt(diagonal))*H0./sqrt(sum(H0.^2,2));
-
-% Iterations
-[H,~] = ProjPowerIterations(K,H0,diagonal,n_it,tol);
-%[Answer,normgradient] = IsLocalMaximum(H,Q,diagonal); % checking optimality 
-
-% SVD 
-[V,L] = svd(H);
-l = diag(L);
-disp('Singular values of the solution')
-disp(l)
-
-
-%% kernel matrix
-B = H*H';
-
-%% Plotting
-u0 =  l(1)*V(:,1);
-u1 =  l(2)*V(:,2);
-%figure;scatter(u0,u1,[],'o','filled'); title('SDP embedding')
-
-u = [u0 u1];
-
 n_it = 50000; % maximal number of iterations
 tol = 1e-09; % tolerance on relative difference between 2 iterates
 r = 10;
 id_train = 1:N;
 nb_comp = 2;
-[u_new,~,~,~,deg] = embed(x,id_train,bw,r,n_it,tol,nb_comp,dx)
-disp(norm(u_new -u))
-%% out of sample 
 
+[V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,deg,K] = embed(x,id_train,bw,r,n_it,tol,nb_comp,dx);
+u = V_SDP;
+B =   u*u';
+u0 = u(:,1);
+u1 = u(:,2);
+
+%% out of sample 
 n_oos = 100; % number of points
 l_n = 2/n_oos; % interdistance
 
 x_oos = ((-1+l_n/2):l_n: (1-l_n/2))';
-
-%% extension of the diffusion kernel
-d_oos_x = pdist2(x_oos,x);
-k_oos = exp(-d_oos_x.^2/bw^2); 
-deg_oos = sum(k_oos,2)*dx;
-k_ext_norm = diag(1./sqrt(deg_oos))*k_oos*diag(1./sqrt(deg));
-v0_ext = dx*k_ext_norm*v0;
-
-K_ext = k_ext_norm -v0_ext*v0';
-nor = 1./deg_oos-deg_oos/(sum(dx*deg));
-u_oos_0 = dx*K_ext*u;
-M = sum(u_oos_0.^2,2);
-u_oos = diag(sqrt(nor))*u_oos_0./sqrt(M);
-
 v0 = sqrt(deg/sum(dx*deg));
-u_oos_new = oos(x_oos,x,u,deg,v0,bw,dx)
-disp(norm(u_oos - u_oos_new))
-    
+u_oos = oos(x_oos,x,u,deg,v0,bw,dx); % out-of sample
 B_oos =   u_oos*u_oos';
 
+%% plotting
 figure; plot(x,u0,'.'); hold on; plot(x,u1,'.'); 
 xlabel('x'); ylabel('\chi_1 and \chi_2')
 place = 'Figures/sparse_interval_eig.png';
@@ -112,9 +60,9 @@ place = 'Figures/oos_sparse_interval_embedding.png';
 saveas(gcf,place);
 close all;  
 
-y = eigs(dx*K,1);
-disp ('Largest eig')
-disp(y)
+%% 
+disp ('Largest eigenvalue')
+disp(eigenvalues_DM)
 disp ('Objective')
 disp (dx*dx*trace(B*K)/trace(dx*K))
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -126,71 +74,22 @@ n_tot = 2000;
 dx = 2/n_tot;
 dsurf = dx*dx;
 
-x_dense = (-1+dx/2):dx: (1-dx/2);
+x_dense = ((-1+dx/2):dx: (1-dx/2))';
+id_train_dense = 1:length(x_dense);
 
-d = zeros(length(x_dense),length(x_dense));
-
-for i = 1:length(x_dense)
-    for j=1:length(x_dense)
-        d(i,j) = abs(x_dense(i)-x_dense(j));
-    end
-end
-dist = triu(d-diag(diag(d))); 
-[el,~] = find(dist~=0);
-
-k = exp(-d.^2/bw^2);
-deg = dx*sum(k,2);
-
-%diffusion kernel matrix
-v0 = sqrt(deg/sum(dx*deg));
-
-k_norm = diag(1./sqrt(deg))*k*diag(1./sqrt(deg));
-K = (k_norm-v0*v0');
-
-diagonal = diag(K);
-
-Q = K;
-n_it = 50000;
-tol = 1e-9;
-% Initialization
-    r = 10;N = length(x_dense);
-    H0 = rand(N,r)-0.5; H0 = diag(sqrt(diagonal))*H0./sqrt(sum(H0.^2,2));
-
-% Iterations
-    [H,dist] = ProjPowerIterations(Q,H0,diagonal,n_it,tol);
-    [Answer,normgradient] = IsLocalMaximum(H,Q,diagonal);
-    [V,L] = svd(H);
-
-disp('Eigenvalues of PCA ...')
-    l = diag(L);[id,~] = find(l>1e-05);
-    nb_nnz = nnz(l>1e-05);
-    disp(nb_nnz)
-p = deg/sum(deg);
-B_dense = H*H';
-
-B_test = sqrt(p)*sqrt(p)'+B_dense;
+[V_SDP_dense,~,~,~,deg,K_dense] = embed(x_dense,id_train_dense,bw,r,n_it,tol,nb_comp,dx);
+u_dense = V_SDP_dense;
+B_dense =   u_dense*u_dense';
+u0_dense = u_dense(:,1);
+u1_dense = u_dense(:,2);
 
 
 %% Plotting
-disp('Plotting ...')
-if l(3)/length(H)>1e-05
-    u0_dense =  l(1)*V(:,1);
-    u1_dense =  l(2)*V(:,2);
-    u2_dense =  l(3)*V(:,3);
-    figure;scatter3(u0_dense,u1_dense,u2_dense,[],'.'); title('SDP embedding')
-
-elseif l(2)/length(H)>1e-05
-    u0_dense =  l(1)*V(:,1);
-    u1_dense =  l(2)*V(:,2);
-    figure;scatter(u0_dense,u1_dense,[],'.'); title('SDP embedding')        
-
-else
-        disp('Only rank 1')
-end
+figure;scatter(u0_dense,u1_dense,[],'.'); title('SDP embedding')        
 
 
 disp ('Objective denser sampling')
-disp (dx*dx*trace(B_dense*K)/trace(dx*K))
+disp (dx*dx*trace(B_dense*K_dense)/trace(dx*K_dense))
 
 figure; plot(x_dense,u0_dense,'.'); hold on; plot(x_dense,u1_dense,'.'); 
 xlabel('x'); ylabel('\chi_1 and \chi_2')
@@ -210,7 +109,7 @@ place = 'Figures/oos_dense_interval_eig.png';
 saveas(gcf,place);
 close all;  
 
-y = eigs(dx*K,1);
+y = eigs(dx*K_dense,1);
 disp ('Largest eig')
 disp(y)
 
@@ -243,6 +142,5 @@ for i =1:length(X0)
         z = [z;B_n(i,j)];
     end
 end
-%scatter3(x,y,z,'.'); 
 surf(X0,Y0,B_n)
 

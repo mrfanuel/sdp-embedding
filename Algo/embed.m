@@ -1,4 +1,4 @@
-function [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,deg] = embed(X,id_train,bw,r,n_it,tol,nb_comp,dx_optional)
+function [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,deg,K] = embed(X,id_train,bw,r,n_it,tol,nb_comp,dx_optional)
 
     % dx is the discretization step (only if we discretize an integral)
     if nargin > 7
@@ -59,7 +59,7 @@ function [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,deg] = embed(X,id_train
 
 
     % Diffusion maps
-    [X_c,Y_c] = eigs(K);
+    [X_c,Y_c] = eigs(K*dx);
     lambda_DM = diag(Y_c);
 
     eigenvalues_DM = lambda_DM;
