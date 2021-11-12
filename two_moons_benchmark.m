@@ -129,8 +129,6 @@ ylim([0 1])
 errorbar(range_bw,mean_nmi_DM,std_nmi_DM,'-rs','DisplayName','mean DM')
 ylim([0 1])
 legend('nmi kmeans raw data','nmi SDP','nmi DM')
-
-matlab2tikz('Figures/mean_twomoons_gaussians_benchmark.tikz')
 saveas(gcf,'Figures/mean_twomoons_gaussians_benchmark','epsc')
 
 figure;
@@ -142,18 +140,13 @@ ylim([0 1])
 errorbar(range_bw,mean_nmi_DM_proj,std_nmi_DM_proj,'-rs','DisplayName','mean DM + proj')
 ylim([0 1])
 legend('nmi kmeans raw data','nmi SDP+proj','nmi DM+proj')
-
-matlab2tikz('Figures/mean_proj_twomoons_gaussians_benchmark.tikz')
 saveas(gcf,'Figures/mean_proj_twomoons_gaussians_benchmark','epsc')
 
 
 figure;
 plot(range_bw, eigs_SDP,'.-','MarkerSize',15)
-matlab2tikz('Figures/eigs_SDP_twomoons_gaussians_benchmark.tikz')
 saveas(gcf,'Figures/eigs_SDP_twomoons_gaussians_benchmark','epsc')
 
 figure;
 plot(range_bw, eigs_DM,'.-','MarkerSize',15)
-
-matlab2tikz('Figures/eigs_DM_twomoons_gaussians_benchmark.tikz')
 saveas(gcf,'Figures/eigs_DM_twomoons_gaussians_benchmark','epsc')

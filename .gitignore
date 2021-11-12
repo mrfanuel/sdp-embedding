@@ -1,2 +1,5 @@
-Figures/*
+.gitignore
 .DS_Store
+
+Figures/*
+!Figures/.gitkeep
