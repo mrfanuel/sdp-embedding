@@ -12,11 +12,6 @@ Michaël Fanuel, Antoine Aspeel, Jean-Charles Delvenne, Johan A.K. Suykens, **Po
   - t10k-images-idx3-ubyte.gz
   - t10k-labels-idx1-ubyte.gz
 
-## Files
-- ```Matlab
-interval_oos.m
-```  
-  
 ### Dependencies
 - MATLAB R2019b
 - Statistics and Machine Learning Toolbox
