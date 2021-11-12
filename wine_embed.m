@@ -38,7 +38,7 @@ for i=1:nb_bw
     r = 20;
     id_train = 1:N;
     n_comp = 3;
-    [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM] = embed(X,id_train,bw,r,n_it,tol,n_comp);
+    [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,~,~] = embed(X,id_train,bw,r,n_it,tol,n_comp);
     l0 = sqrt_eigenvalues_SDP;
 
     disp('Nb of significant singular values')

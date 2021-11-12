@@ -60,7 +60,7 @@ for m = 1:nb_datasets
         N = size(X,1);
         id_train = 1:N;
         nb_comp = 2;
-        [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,~] = embed(X,id_train,bw,r,n_it,tol,nb_comp);
+        [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,~,~] = embed(X,id_train,bw,r,n_it,tol,nb_comp);
 
         eigenvalues_SDP = sqrt_eigenvalues_SDP.^2
         eigs_SDP(i,:) = eigenvalues_SDP(1:n_spec)/sum(eigenvalues_SDP);

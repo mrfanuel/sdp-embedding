@@ -40,7 +40,7 @@ for rep = 1:n_rep
     r = 30;
     nb_comp = 2;
     
-    [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,deg] = embed(X,id_train,bw,r,n_it,tol,nb_comp);
+    [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,deg,~] = embed(X,id_train,bw,r,n_it,tol,nb_comp);
 
     
     s=3; % marker size 

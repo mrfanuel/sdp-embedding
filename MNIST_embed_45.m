@@ -26,7 +26,7 @@ n_train = floor(0.3*N_tot);
 id_train =  datasample(1:N_tot,n_train,'Replace',false);
 nb_comp = 2; 
 
-[V_SDP,~,sqrt_eigenvalues_SDP,~,deg] = embed(X,id_train,bw,r,n_it,tol,nb_comp);
+[V_SDP,~,sqrt_eigenvalues_SDP,~,deg,~] = embed(X,id_train,bw,r,n_it,tol,nb_comp);
 
 v0 = sqrt(deg/sum(deg));
 %%%%%%%%%%%%%%%%%%%%%%%%% % Embedding of the training set %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
