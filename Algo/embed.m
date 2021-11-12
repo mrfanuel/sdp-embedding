@@ -1,4 +1,11 @@
-function [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,deg] = embed(X,id_train,bw,r,n_it,tol,nb_comp)
+function [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,deg] = embed(X,id_train,bw,r,n_it,tol,nb_comp,dx_optional)
+
+    % dx is the discretization step (only if we discretize an integral)
+    if nargin > 7
+        dx = dx_optional;
+    else
+        dx = 1;
+    end
     
     d_tot = pdist2(X,X);
     N = size(X,1);
@@ -10,8 +17,9 @@ function [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,deg] = embed(X,id_train
     d_train = pdist2(X_train,X_train);
 
     k = exp(-d_train.^2/bw^2);
-    deg = sum(k,2);
-    v0 = sqrt(deg/sum(deg));
+
+    deg = dx*sum(k,2);
+    v0 = sqrt(deg/sum(dx*deg));
 
     k_norm = diag(1./sqrt(deg))*k*diag(1./sqrt(deg));
     K = (k_norm-v0*v0');% diffusion kernel matrix

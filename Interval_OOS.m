@@ -55,9 +55,15 @@ u0 =  l(1)*V(:,1);
 u1 =  l(2)*V(:,2);
 %figure;scatter(u0,u1,[],'o','filled'); title('SDP embedding')
 
-
 u = [u0 u1];
 
+n_it = 50000; % maximal number of iterations
+tol = 1e-09; % tolerance on relative difference between 2 iterates
+r = 10;
+id_train = 1:N;
+nb_comp = 2;
+[u_new,~,~,~,deg] = embed(x,id_train,bw,r,n_it,tol,nb_comp,dx)
+disp(norm(u_new -u))
 %% out of sample 
 
 n_oos = 100; % number of points
@@ -77,6 +83,10 @@ nor = 1./deg_oos-deg_oos/(sum(dx*deg));
 u_oos_0 = dx*K_ext*u;
 M = sum(u_oos_0.^2,2);
 u_oos = diag(sqrt(nor))*u_oos_0./sqrt(M);
+
+v0 = sqrt(deg/sum(dx*deg));
+u_oos_new = oos(x_oos,x,u,deg,v0,bw,dx)
+disp(norm(u_oos - u_oos_new))
     
 B_oos =   u_oos*u_oos';
 
