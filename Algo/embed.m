@@ -59,7 +59,8 @@ function [V_SDP,V_DM,sqrt_eigenvalues_SDP,eigenvalues_DM,deg,K] = embed(X,id_tra
 
 
     % Diffusion maps
-    [X_c,Y_c] = eigs(K*dx);
+    K_weighted = sqrt(dx)*K*sqrt(dx);
+    [X_c,Y_c] = eigs(K_weighted);
     lambda_DM = diag(Y_c);
 
     eigenvalues_DM = lambda_DM;
