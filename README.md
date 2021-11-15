@@ -19,6 +19,7 @@ In the Demos folder, you can run the following scripts:
 - `quasar_embed_classifier.m` (Fig. 6)
 - `two_moons_plots.m` (Fig. 7)
 - `two_moons_benchmark.m`(Fig. 8)
+  
 Note that the eigenvalue decomposition of the diffusion embedding in `two_moons_benchmark.m` may fail to converge for a very small kernel bandwidth.
 ### Dependencies
 - MATLAB R2019b
