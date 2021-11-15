@@ -40,7 +40,7 @@ B_oos =   u_oos*u_oos';
 %% plotting
 figure; plot(x,u0,'.'); hold on; plot(x,u1,'.'); 
 xlabel('x'); ylabel('\chi_1 and \chi_2')
-place = 'Figures/sparse_interval_eig.png';
+place = '../Figures/sparse_interval_eig.png';
 saveas(gcf,place);
 close all;  
 
@@ -49,14 +49,14 @@ scatter(x_oos,u_oos(:,1),[],'.b');
 scatter(x_oos,u_oos(:,2),[],'.r');
 title('Out-of-sample extension')    
 xlabel('$x$','Interpreter','latex','FontSize',15); ylabel('$\chi_\ell(x)$','Interpreter','latex','FontSize',15)
-place = 'Figures/oos_sparse_interval_eig.png';
+place = '../Figures/oos_sparse_interval_eig.png';
 saveas(gcf,place);
 close all;  
 
 figure;scatter(u0,u1,[],'ok','filled');hold on
 scatter(u_oos(:,1),u_oos(:,2),[],'.'); title('SDP embedding')        
 xlabel('$\chi_1(x)$','Interpreter','latex','FontSize',15); ylabel('$\chi_2(x)$','Interpreter','latex','FontSize',15)
-place = 'Figures/oos_sparse_interval_embedding.png';
+place = '../Figures/oos_sparse_interval_embedding.png';
 saveas(gcf,place);
 close all;  
 
@@ -93,7 +93,7 @@ disp (dx*dx*trace(B_dense*K_dense)/trace(dx*K_dense))
 
 figure; plot(x_dense,u0_dense,'.'); hold on; plot(x_dense,u1_dense,'.'); 
 xlabel('x'); ylabel('\chi_1 and \chi_2')
-place = 'Figures/dense_interval_embedding.png';
+place = '../Figures/dense_interval_embedding.png';
 saveas(gcf,place);
 close all;  
 
@@ -105,7 +105,7 @@ plot(x_oos,u_oos(:,2),'.');
 
 xlabel('x'); ylabel('\chi_1 and \chi_2')
 title('Comparison samplings')
-place = 'Figures/oos_dense_interval_eig.png';
+place = '../Figures/oos_dense_interval_eig.png';
 saveas(gcf,place);
 close all;  
 

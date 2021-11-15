@@ -56,13 +56,13 @@ for i=1:nb_bw
     if bw == 1.5
         figure;scatter(V_SDP(:,1),V_SDP(:,2),[],truth,'.'); title('SDP embedding sigma=1.5')
         colormap jet;
-        saveas(gcf,'Figures/Embedding_Wine_1p5','epsc')
+        saveas(gcf,'../Figures/Embedding_Wine_1p5','epsc')
         close all;
     end
     if bw == 10
         figure;scatter(V_SDP(:,1),V_SDP(:,2),[],truth,'.'); title('SDP embedding sigma=10')
         colormap jet;
-        saveas(gcf,'Figures/Embedding_Wine_10','epsc')
+        saveas(gcf,'../Figures/Embedding_Wine_10','epsc')
         close all;
     end
     
@@ -74,7 +74,7 @@ plot(range_bw,spectrum(:,1),'.');
 hold on;
 plot(range_bw,spectrum(:,2),'.');
 plot(range_bw,spectrum(:,3),'.');
-saveas(gcf,'Figures/Spetrum_Wine','epsc');
+saveas(gcf,'../Figures/Spetrum_Wine','epsc');
 close all;
 
 

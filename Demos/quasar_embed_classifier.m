@@ -47,13 +47,13 @@ for rep = 1:n_rep
     figure;scatter(V_SDP(:,1),V_SDP(:,2),s, y_train,'o','filled'); 
     colormap jet
 
-    saveas(gcf,'Figures/quasarSDP','epsc')
+    saveas(gcf,'../Figures/quasarSDP','epsc')
     %
 
     figure; 
     scatter(V_DM(:,1),V_DM(:,2),s,y_train,'o','filled')
     colormap jet
-    saveas(gcf,'Figures/quasarDiffusion','epsc')
+    saveas(gcf,'../Figures/quasarDiffusion','epsc')
 
     u_train = V_SDP;
 
@@ -94,13 +94,13 @@ for rep = 1:n_rep
     scatter(X_c_oos_0,X_c_oos_1,s, y_oos,'o','filled'); 
     colormap jet
 
-    saveas(gcf,'Figures/quasarDMoos','epsc')
+    saveas(gcf,'../Figures/quasarDMoos','epsc')
 
    
     scatter(u_oos(:,1),u_oos(:,2),s, y_oos,'o','filled');    
     colormap jet
 
-    saveas(gcf,'Figures/quasarSDPoos','epsc')
+    saveas(gcf,'../Figures/quasarSDPoos','epsc')
 
     % Classifier
     Mdl_SDP = fitcknn(u_train,y_train,'NumNeighbors',nb_nb,'Standardize',0)

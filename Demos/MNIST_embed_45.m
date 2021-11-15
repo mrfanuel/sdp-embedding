@@ -34,8 +34,6 @@ v0 = sqrt(deg/sum(deg));
 
 figure;scatter(V_SDP(:,1),V_SDP(:,2),[],truth45(id_train),'.'); title('SDP embedding') 
 colormap jet;
-%place = '/Figures/mnist45_SDP_embeding.png';
-%saveas(gcf,place)
 close all;
 %%%%%%%%%%%%%%%%%%%%%%%%%% Out-of-sample extension %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 dim = 2;
@@ -73,7 +71,7 @@ set(xAX,'FontSize', 15)
 set(yAX, 'FontSize', 15);
 set(zAX, 'FontSize', 15);
 
-place = 'Figures/mnist45_oos.png';
+place = '../Figures/mnist45_oos.png';
 saveas(gcf,place);
 %close all;
 
@@ -87,7 +85,7 @@ zAX = get(gca,'ZAxis');
 set(xAX,'FontSize', 15)
 set(yAX, 'FontSize', 15);
 set(zAX, 'FontSize', 15);
-place = 'Figures/mnist45_training.png';
+place = '../Figures/mnist45_training.png';
 saveas(gcf,place);
 %close all;
 
