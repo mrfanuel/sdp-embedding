@@ -1,7 +1,7 @@
 clear; close all;
-addpath('Data')
-addpath('Algo')
-addpath('Utils')  
+addpath('../Data')
+addpath('../Algo')
+addpath('../Utils')  
 
 bw = 0.1
 

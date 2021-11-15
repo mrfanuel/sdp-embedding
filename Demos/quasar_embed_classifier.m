@@ -1,6 +1,6 @@
 clear; close all;
-addpath('Data')
-addpath('Algo')
+addpath('../Data')
+addpath('../Algo')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Embedding of the interval [-1,1]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

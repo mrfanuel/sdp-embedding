@@ -3,8 +3,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear;close all;
 
-addpath(genpath('Data'))  
-addpath(genpath('Algo'))  
+addpath(genpath('../Data'))  
+addpath(genpath('../Algo'))  
 %%%%%%%%%%%%%%%%%%%%%%%%%% Loading training data of MNIST %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 images = loadMNISTImages('train-images.idx3-ubyte');

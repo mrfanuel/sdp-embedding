@@ -3,9 +3,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear;close all;
 
-addpath(genpath('Data'))  
-addpath(genpath('Algo'))
-addpath(genpath('Utils'))  
+addpath(genpath('../Data'))  
+addpath(genpath('../Algo'))
+addpath(genpath('../Utils'))  
 
 %%%%%%%%%%%%%%%%%%%%%%%%%% Loading training data of MNIST %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [X,Y] = wine_dataset;
