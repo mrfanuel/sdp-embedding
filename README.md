@@ -1,7 +1,7 @@
 # Positive semi-definite embedding for dimensionality reduction
 This is the code associated to the following paper:
 
-Michaël Fanuel, Antoine Aspeel, Jean-Charles Delvenne, Johan A.K. Suykens, [Positive semi-definite embedding for dimensionality reduction and out-of-sample extensions](https://doi.org/10.1137/20M1370653), published in SIAM journal of mathematics for data science, [https://arxiv.org/abs/1711.07271](https://arxiv.org/abs/1711.07271)
+Michaël Fanuel, Antoine Aspeel, Jean-Charles Delvenne, Johan A.K. Suykens, [Positive semi-definite embedding for dimensionality reduction and out-of-sample extensions](https://doi.org/10.1137/20M1370653), published in SIAM journal on mathematics for data science, [https://arxiv.org/abs/1711.07271](https://arxiv.org/abs/1711.07271)
 
 ### Datasets
 
